@@ -42,7 +42,7 @@ Any and all of the fields that are documented can be passed in here, including c
 ### Put a Person In A Group
 
 ```
-$sccrm->addPersonToGroup($person->uid, 2); //2 is the group ID we're adding the new person to.
+$sccrm->addPersonToGroup($person->uid, 2); //2 is the ID of the group we're adding the new person to.
 ```
 
 ### Assign an Interaction
