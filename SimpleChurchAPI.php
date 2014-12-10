@@ -70,6 +70,13 @@ class SimpleChurchAPI
 		return $this->createInteraction($params);
 	}
 	
+	public function logInteraction($params)
+	{
+		$params['op'] = 'log';
+		
+		return $this->createInteraction($params);
+	}
+	
 	private function createInteraction($params)
 	{
 		$ret = $this->doPost('interactions', $params);
