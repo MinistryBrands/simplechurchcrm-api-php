@@ -24,10 +24,10 @@ class SimpleChurchAPI
 	
 	public function login($username, $password)
 	{
-		$ret = $this->doPost('user/login', [
+		$ret = $this->doPost('user/login', array(
 		   'username' => $username,
 		   'password' => $password
-		]);
+		));
 		
 		if (!$ret->success)
 		{
@@ -55,7 +55,7 @@ class SimpleChurchAPI
 	
 	public function addPersonToGroup($uid, $gid)
 	{
-		$ret = $this->doPost('people/'.$uid.'/add_to_group', ['gid' => $gid]);
+		$ret = $this->doPost('people/'.$uid.'/add_to_group', array('gid' => $gid));
 		
 		if (!$ret->success)
 		{
@@ -106,7 +106,7 @@ class SimpleChurchAPI
 		$opts = array(
 		   'http' => array(
 		      'method'  => 'POST',
-		      'header'  => ['Content-type: application/x-www-form-urlencoded', 'X-SessionId: '.$this->getSessionId()],
+		      'header'  => array('Content-type: application/x-www-form-urlencoded', 'X-SessionId: '.$this->getSessionId()),
 		      'content' => http_build_query($params),
 		   ),
 		);
