@@ -101,19 +101,54 @@ class SimpleChurchAPI
 		return $this;
 	}
 
+	public function getCalendarEvents($params)
+	{
+		$ret = $this->doGet('calendar/events', $params);
+
+		if (!$ret->success)
+		{
+			throw new Exception($ret->error);
+		}
+
+		return $ret->data;
+	}
+
+	private function buildRequestUrl($path, $params = array())
+	{
+		$url = 'https://'.$this->subDomain.'.'.$this->domain.$this->apiBase.$path;
+
+		if ($params)
+		{
+			$url .= '?'.http_build_query($params);
+		}
+
+		return $url;
+	}
+
+	private function doGet($path, $params)
+	{
+		return $this->doRequest($this->buildRequestUrl($path, $params), array(
+			'method' => 'GET',
+			'header' => array('Content-type: application/json')
+		));
+	}
+
 	private function doPost($path, $params)
 	{
-		$opts = array(
-		   'http' => array(
-		      'method'  => 'POST',
-		      'header'  => array('Content-type: application/x-www-form-urlencoded', 'X-SessionId: '.$this->getSessionId()),
-		      'content' => http_build_query($params),
-		   ),
-		);
-		
-		$context  = stream_context_create($opts);
-		$result = file_get_contents('https://'.$this->subDomain.'.'.$this->domain.$this->apiBase.$path, FALSE, $context);
-		
+		return $this->doRequest($this->buildRequestUrl($path), array(
+			'method'  => 'POST',
+			'header'  => array('Content-type: application/x-www-form-urlencoded'),
+			'content' => http_build_query($params)
+		));
+	}
+
+	private function doRequest($url, $opts)
+	{
+		$opts['header'][] = 'X-SessionId: '.$this->getSessionId();
+
+		$context = stream_context_create(array('http' => $opts));
+		$result = file_get_contents($url, FALSE, $context);
+
 		return json_decode($result);
 	}
 }
