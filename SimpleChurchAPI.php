@@ -113,6 +113,18 @@ class SimpleChurchAPI
 		return $ret->data;
 	}
 
+	public function getCalendarViews()
+	{
+		$ret = $this->doGet('calendar/views');
+
+		if (!$ret->success)
+		{
+			throw new Exception($ret->error);
+		}
+
+		return $ret->data;
+	}
+
 	private function buildRequestUrl($path, $params = array())
 	{
 		$url = 'https://'.$this->subDomain.'.'.$this->domain.$this->apiBase.$path;
@@ -125,7 +137,7 @@ class SimpleChurchAPI
 		return $url;
 	}
 
-	private function doGet($path, $params)
+	private function doGet($path, $params = array())
 	{
 		return $this->doRequest($this->buildRequestUrl($path, $params), array(
 			'method' => 'GET',
