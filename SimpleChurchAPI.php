@@ -161,7 +161,24 @@ class SimpleChurchAPI
 		$context = stream_context_create(array('http' => $opts));
 		$result = file_get_contents($url, FALSE, $context);
 
+		if (!$result) {
+			$this->throwResponseException($http_response_header);
+		}
+
 		return json_decode($result);
+	}
+
+	private function throwResponseException($headers)
+	{
+		if (!$headers) {
+			return false;
+		}
+
+		$status = $headers[0];
+
+		list( , $statusCode, $statusDescription) = explode(' ', $status, 3);
+
+		throw new Exception($statusDescription, $statusCode);
 	}
 }
 	
