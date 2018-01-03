@@ -2,157 +2,149 @@
 
 class SimpleChurchAPI
 {
-	var $sessionId = '';
-	var $subDomain = '';
-	var $domain = 'simplechurchcrm.com';
-	var $apiBase = '/api/';
+    var $sessionId = '';
+    var $subDomain = '';
+    var $domain = 'simplechurchcrm.com';
+    var $apiBase = '/api/';
 
-	public function __construct($opts = array())
-	{
-		if ($opts['sessionId'])
-		{
-			$this->setSessionId($opts['sessionId']);
-		}
+    public function __construct($opts = array())
+    {
+        if ($opts['sessionId']) {
+            $this->setSessionId($opts['sessionId']);
+        }
 
-		if (!$opts['subDomain'])
-		{
-			throw new Exception('subDomain is required.');
-		}
+        if (!$opts['subDomain']) {
+            throw new Exception('subDomain is required.');
+        }
 
-		$this->subDomain = $opts['subDomain'];
-	}
+        $this->subDomain = $opts['subDomain'];
+    }
 
-	public function login($username, $password)
-	{
-		$ret = $this->doPost('user/login', array(
-			'username' => $username,
-			'password' => $password
-		));
+    public function login($username, $password)
+    {
+        $ret = $this->doPost('user/login', array(
+	        'username' => $username,
+	        'password' => $password
+        ));
 
-		$this->setSessionId($ret->session_id);
+        $this->setSessionId($ret->session_id);
 
-		return $ret;
-	}
+        return $ret;
+    }
 
-	public function createPerson($params)
-	{
-		return $this->doPost('people', $params);
-	}
+    public function createPerson($params)
+    {
+        return $this->doPost('people', $params);
+    }
 
-	public function addPersonToGroup($uid, $gid)
-	{
-		return $this->doPost('people/'.$uid.'/add_to_group', array('gid' => $gid));
-	}
+    public function addPersonToGroup($uid, $gid)
+    {
+        return $this->doPost('people/'.$uid.'/add_to_group', array('gid' => $gid));
+    }
 
-	public function assignInteraction($params)
-	{
-		$params['op'] = 'assign';
+    public function assignInteraction($params)
+    {
+        $params['op'] = 'assign';
 
-		return $this->createInteraction($params);
-	}
+        return $this->createInteraction($params);
+    }
 
-	public function logInteraction($params)
-	{
-		$params['op'] = 'log';
+    public function logInteraction($params)
+    {
+        $params['op'] = 'log';
 
-		return $this->createInteraction($params);
-	}
+        return $this->createInteraction($params);
+    }
 
-	private function createInteraction($params)
-	{
-		return $this->doPost('interactions', $params);
-	}
+    private function createInteraction($params)
+    {
+        return $this->doPost('interactions', $params);
+    }
 
-	public function getSessionId()
-	{
-		return $this->sessionId;
-	}
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
 
-	public function setSessionId($sessionId)
-	{
-		$this->sessionId = $sessionId;
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getCalendarEvents($params)
-	{
-		return $this->doGet('calendar/events', $params);
-	}
+    public function getCalendarEvents($params)
+    {
+        return $this->doGet('calendar/events', $params);
+    }
 
-	public function getCalendarViews()
-	{
-		return $this->doGet('calendar/views');
-	}
+    public function getCalendarViews()
+    {
+        return $this->doGet('calendar/views');
+    }
 
-	private function buildRequestUrl($path, $params = array())
-	{
-		$url = 'https://'.$this->subDomain.'.'.$this->domain.$this->apiBase.$path;
+    private function buildRequestUrl($path, $params = array())
+    {
+        $url = 'https://'.$this->subDomain.'.'.$this->domain.$this->apiBase.$path;
 
-		if ($params)
-		{
-			$url .= '?'.http_build_query($params);
-		}
+        if ($params) {
+            $url .= '?'.http_build_query($params);
+        }
 
-		return $url;
-	}
+        return $url;
+    }
 
-	private function doGet($path, $params = array())
-	{
-		$headers = array('Content-type: application/json');
+    private function doGet($path, $params = array())
+    {
+        $headers = array('Content-type: application/json');
 
-		return $this->doRequest('GET', $this->buildRequestUrl($path, $params), $headers);
-	}
+        return $this->doRequest('GET', $this->buildRequestUrl($path, $params), $headers);
+    }
 
-	private function doPost($path, $params)
-	{
-		$headers = array('Content-type: application/x-www-form-urlencoded');
+    private function doPost($path, $params)
+    {
+        $headers = array('Content-type: application/x-www-form-urlencoded');
 
-		return $this->doRequest('POST', $this->buildRequestUrl($path), $headers, $params);
-	}
+        return $this->doRequest('POST', $this->buildRequestUrl($path), $headers, $params);
+    }
 
-	private function doRequest($method, $url, $headers = array(), $params = array())
-	{
-		$headers[] = 'X-SessionId: '.$this->getSessionId();
+    private function doRequest($method, $url, $headers = array(), $params = array())
+    {
+        $headers[] = 'X-SessionId: '.$this->getSessionId();
 
-		$request = curl_init();
+        $request = curl_init();
 
-		curl_setopt($request, CURLOPT_CUSTOMREQUEST, $method);
-		curl_setopt($request, CURLOPT_URL, $url);
-		curl_setopt($request, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($request, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($request, CURLOPT_URL, $url);
+        curl_setopt($request, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
 
-		if ($params)
-		{
-			curl_setopt($request, CURLOPT_POSTFIELDS, http_build_query($params));
-		}
+        if ($params) {
+            curl_setopt($request, CURLOPT_POSTFIELDS, http_build_query($params));
+        }
 
-		$response = curl_exec($request);
-		$response = json_decode($response);
+        $response = curl_exec($request);
+        $response = json_decode($response);
 
-		$statusCode = curl_getinfo($request, CURLINFO_HTTP_CODE);
+        $statusCode = curl_getinfo($request, CURLINFO_HTTP_CODE);
 
-		curl_close($request);
+        curl_close($request);
 
-		$this->throwExceptionIfError($response, $statusCode);
+        $this->throwExceptionIfError($response, $statusCode);
 
-		return $response->data;
-	}
+        return $response->data;
+    }
 
-	private function throwExceptionIfError($response, $statusCode = null)
-	{
-		if ($response && $response->success)
-		{
-			return false;
-		}
+    private function throwExceptionIfError($response, $statusCode = null)
+    {
+        if ($response && $response->success) {
+            return false;
+        }
 
-		if ($response)
-		{
-			throw new Exception($response->error, $response->statusCode);
-		}
-		else
-		{
-			throw new Exception('No response', $statusCode);
-		}
-	}
+        if ($response) {
+            throw new Exception($response->error, $response->statusCode);
+        } else {
+            throw new Exception('No response', $statusCode);
+        }
+    }
 }
