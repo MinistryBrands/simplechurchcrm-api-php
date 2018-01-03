@@ -6,22 +6,22 @@ class SimpleChurchAPI
 	var $subDomain = '';
 	var $domain = 'simplechurchcrm.com';
 	var $apiBase = '/api/';
-	
+
 	public function __construct($opts = array())
 	{
 		if ($opts['sessionId'])
 		{
 			$this->setSessionId($opts['sessionId']);
 		}
-		
+
 		if (!$opts['subDomain'])
 		{
 			throw new Exception('subDomain is required.');
 		}
-		
+
 		$this->subDomain = $opts['subDomain'];
 	}
-	
+
 	public function login($username, $password)
 	{
 		$ret = $this->doPost('user/login', array(
@@ -33,45 +33,45 @@ class SimpleChurchAPI
 
 		return $ret;
 	}
-	
+
 	public function createPerson($params)
 	{
 		return $this->doPost('people', $params);
 	}
-	
+
 	public function addPersonToGroup($uid, $gid)
 	{
 		return $this->doPost('people/'.$uid.'/add_to_group', array('gid' => $gid));
 	}
-	
+
 	public function assignInteraction($params)
 	{
 		$params['op'] = 'assign';
-		
+
 		return $this->createInteraction($params);
 	}
-	
+
 	public function logInteraction($params)
 	{
 		$params['op'] = 'log';
-		
+
 		return $this->createInteraction($params);
 	}
-	
+
 	private function createInteraction($params)
 	{
 		return $this->doPost('interactions', $params);
 	}
-	
+
 	public function getSessionId()
 	{
 		return $this->sessionId;
 	}
-	
+
 	public function setSessionId($sessionId)
 	{
 		$this->sessionId = $sessionId;
-		
+
 		return $this;
 	}
 
@@ -156,5 +156,3 @@ class SimpleChurchAPI
 		}
 	}
 }
-	
-?>
