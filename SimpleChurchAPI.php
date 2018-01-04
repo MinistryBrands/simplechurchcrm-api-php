@@ -2,10 +2,11 @@
 
 class SimpleChurchAPI
 {
-    var $sessionId = '';
-    var $subDomain = '';
-    var $domain = 'simplechurchcrm.com';
-    var $apiBase = '/api/';
+    private $domain = 'simplechurchcrm.com';
+    private $apiBase = '/api/';
+
+    private $sessionId = '';
+    private $subDomain = '';
 
     public function __construct($opts = array())
     {
