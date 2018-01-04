@@ -18,7 +18,31 @@ class SimpleChurchAPI
             throw new Exception('subDomain is required.');
         }
 
-        $this->subDomain = $opts['subDomain'];
+        $this->setSubDomain($opts['subDomain']);
+    }
+
+    public function setSubDomain($subDomain)
+    {
+    	$this->subDomain = $subDomain;
+
+    	return $this;
+    }
+
+    public function getSubDomain()
+    {
+    	return $this->subDomain;
+    }
+
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
+    }
+
+    public function getSessionId()
+    {
+        return $this->sessionId;
     }
 
     public function login($username, $password)
@@ -60,18 +84,6 @@ class SimpleChurchAPI
     private function createInteraction($params)
     {
         return $this->doPost('interactions', $params);
-    }
-
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
     }
 
     public function getCalendarEvents($params)
