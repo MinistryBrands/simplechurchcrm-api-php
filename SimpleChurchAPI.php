@@ -3,7 +3,7 @@
 class SimpleChurchAPI
 {
     private $domain = 'simplechurchcrm.com';
-    private $apiBase = '/api/';
+    private $basePath = '/api/';
 
     private $sessionId = '';
     private $subDomain = '';
@@ -98,10 +98,11 @@ class SimpleChurchAPI
 
     private function buildRequestUrl($path, $params = array())
     {
-        $url = 'https://'.$this->subDomain.'.'.$this->domain.$this->apiBase.$path;
+        $url  = "https://{$this->getSubDomain()}.{$this->domain}";
+        $url .= "{$this->basePath}{$path}";
 
         if ($params) {
-            $url .= '?'.http_build_query($params);
+            $url .= '?' . http_build_query($params);
         }
 
         return $url;
