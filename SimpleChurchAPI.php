@@ -106,18 +106,6 @@ class SimpleChurchAPI
         return $this->doPost(trim($path, '/'), $params);
     }
 
-    private function buildRequestUrl($path, $params = array())
-    {
-        $url  = "https://{$this->getSubDomain()}.{$this->domain}";
-        $url .= "{$this->basePath}{$path}";
-
-        if ($params) {
-            $url .= '?' . http_build_query($params);
-        }
-
-        return $url;
-    }
-
     private function doGet($path, $params = array())
     {
         $headers = array('Content-type: application/json');
@@ -157,6 +145,18 @@ class SimpleChurchAPI
         $this->throwExceptionIfError($response, $statusCode);
 
         return $response->data;
+    }
+
+    private function buildRequestUrl($path, $params = array())
+    {
+        $url  = "https://{$this->getSubDomain()}.{$this->domain}";
+        $url .= "{$this->basePath}{$path}";
+
+        if ($params) {
+            $url .= '?' . http_build_query($params);
+        }
+
+        return $url;
     }
 
     private function throwExceptionIfError($response, $statusCode = null)
