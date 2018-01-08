@@ -96,6 +96,16 @@ class SimpleChurchAPI
         return $this->doGet('calendar/views');
     }
 
+    public function get($path, $params = array())
+    {
+        return $this->doGet(trim($path, '/'), $params);
+    }
+
+    public function post($path, $params = array())
+    {
+        return $this->doPost(trim($path, '/'), $params);
+    }
+
     private function buildRequestUrl($path, $params = array())
     {
         $url  = "https://{$this->getSubDomain()}.{$this->domain}";
