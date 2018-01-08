@@ -8,17 +8,17 @@ class SimpleChurchAPI
     private $sessionId = '';
     private $subDomain = '';
 
-    public function __construct($opts = array())
+    public function __construct(array $args)
     {
-        if ($opts['sessionId']) {
-            $this->setSessionId($opts['sessionId']);
+        if (empty($args['subDomain'])) {
+            throw new Exception("Argument \"subDomain\" is required.");
         }
 
-        if (!$opts['subDomain']) {
-            throw new Exception('subDomain is required.');
-        }
+        $this->setSubDomain($args['subDomain']);
 
-        $this->setSubDomain($opts['subDomain']);
+        if (!empty($args['sessionId'])) {
+            $this->setSessionId($args['sessionId']);
+        }
     }
 
     public function setSubDomain($subDomain)
