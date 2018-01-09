@@ -9,9 +9,9 @@ Currently, this does not support all of the functions of the API. If you add to 
 ```
 <?php
 
-require 'SimpleChurchAPI.php'
+require 'SimpleChurchApi.php'
 
-$sccrm = new SimpleChurchAPI([
+$sccrm = new SimpleChurchApi([
    'sessionId' => 'Your session ID', //Optional. You can generate one from the API documentation page, 
    'subDomain' => 'mychurch', //Required. the subdomain of simplechurchcrm.com that points to your account.
 ]);

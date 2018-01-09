@@ -1,6 +1,7 @@
 <?php
+namespace SCCRM;
 
-class SimpleChurchAPI
+class SimpleChurchApi
 {
     private $domain = 'simplechurchcrm.com';
     private $basePath = '/api/';
