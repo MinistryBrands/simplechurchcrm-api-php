@@ -8,8 +8,9 @@ Currently, this does not support all of the functions of the API. If you add to 
 ### Authenticate
 ```
 <?php
-
 require 'SimpleChurchApi.php'
+
+use SCCRM\SimpleChurchApi;
 
 $sccrm = new SimpleChurchApi([
    'sessionId' => 'Your session ID', //Optional. You can generate one from the API documentation page, 
