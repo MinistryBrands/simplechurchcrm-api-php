@@ -96,16 +96,14 @@ class SimpleChurchAPI
         return $this->doGet('calendar/views');
     }
 
-    private function buildRequestUrl($path, $params = array())
+    public function get($path, $params = array())
     {
-        $url  = "https://{$this->getSubDomain()}.{$this->domain}";
-        $url .= "{$this->basePath}{$path}";
+        return $this->doGet(trim($path, '/'), $params);
+    }
 
-        if ($params) {
-            $url .= '?' . http_build_query($params);
-        }
-
-        return $url;
+    public function post($path, $params = array())
+    {
+        return $this->doPost(trim($path, '/'), $params);
     }
 
     private function doGet($path, $params = array())
@@ -147,6 +145,18 @@ class SimpleChurchAPI
         $this->throwExceptionIfError($response, $statusCode);
 
         return $response->data;
+    }
+
+    private function buildRequestUrl($path, $params = array())
+    {
+        $url  = "https://{$this->getSubDomain()}.{$this->domain}";
+        $url .= "{$this->basePath}{$path}";
+
+        if ($params) {
+            $url .= '?' . http_build_query($params);
+        }
+
+        return $url;
     }
 
     private function throwExceptionIfError($response, $statusCode = null)

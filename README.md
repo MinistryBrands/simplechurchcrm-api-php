@@ -56,3 +56,11 @@ $sccrm->assignInteraction([
    'dateCompleteBy' => date('Y-m-d', strtotime('+7 days')),
 ]);
 ```
+
+### Or, Make any GET or POST Request
+
+```
+$sccrm->get('calendar/properties');
+
+$sccrm->post('interactions', $params);
+```
