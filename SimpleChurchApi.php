@@ -1,6 +1,7 @@
 <?php
+namespace SCCRM;
 
-class SimpleChurchAPI
+class SimpleChurchApi
 {
     private $domain = 'simplechurchcrm.com';
     private $basePath = '/api/';
@@ -11,7 +12,7 @@ class SimpleChurchAPI
     public function __construct(array $args)
     {
         if (empty($args['subDomain'])) {
-            throw new Exception("Argument \"subDomain\" is required.");
+            throw new Exception('Argument "subDomain" is required.');
         }
 
         $this->setSubDomain($args['subDomain']);
@@ -23,14 +24,14 @@ class SimpleChurchAPI
 
     public function setSubDomain($subDomain)
     {
-    	$this->subDomain = $subDomain;
+        $this->subDomain = $subDomain;
 
-    	return $this;
+        return $this;
     }
 
     public function getSubDomain()
     {
-    	return $this->subDomain;
+        return $this->subDomain;
     }
 
     public function setSessionId($sessionId)
@@ -47,10 +48,10 @@ class SimpleChurchAPI
 
     public function login($username, $password)
     {
-        $ret = $this->doPost('user/login', array(
-	        'username' => $username,
-	        'password' => $password
-        ));
+        $ret = $this->doPost('user/login', [
+            'username' => $username,
+            'password' => $password,
+        ]);
 
         $this->setSessionId($ret->session_id);
 
@@ -64,7 +65,7 @@ class SimpleChurchAPI
 
     public function addPersonToGroup($uid, $gid)
     {
-        return $this->doPost('people/'.$uid.'/add_to_group', array('gid' => $gid));
+        return $this->doPost('people/'.$uid.'/add_to_group', ['gid' => $gid]);
     }
 
     public function assignInteraction($params)
@@ -96,31 +97,31 @@ class SimpleChurchAPI
         return $this->doGet('calendar/views');
     }
 
-    public function get($path, $params = array())
+    public function get($path, $params = [])
     {
         return $this->doGet(trim($path, '/'), $params);
     }
 
-    public function post($path, $params = array())
+    public function post($path, $params = [])
     {
         return $this->doPost(trim($path, '/'), $params);
     }
 
-    private function doGet($path, $params = array())
+    private function doGet($path, $params = [])
     {
-        $headers = array('Content-type: application/json');
+        $headers = ['Content-type: application/json'];
 
         return $this->doRequest('GET', $this->buildRequestUrl($path, $params), $headers);
     }
 
     private function doPost($path, $params)
     {
-        $headers = array('Content-type: application/x-www-form-urlencoded');
+        $headers = ['Content-type: application/x-www-form-urlencoded'];
 
         return $this->doRequest('POST', $this->buildRequestUrl($path), $headers, $params);
     }
 
-    private function doRequest($method, $url, $headers = array(), $params = array())
+    private function doRequest($method, $url, $headers = [], $params = [])
     {
         $headers[] = 'X-SessionId: '.$this->getSessionId();
 
@@ -147,7 +148,7 @@ class SimpleChurchAPI
         return $response->data;
     }
 
-    private function buildRequestUrl($path, $params = array())
+    private function buildRequestUrl($path, $params = [])
     {
         $url  = "https://{$this->getSubDomain()}.{$this->domain}";
         $url .= "{$this->basePath}{$path}";
