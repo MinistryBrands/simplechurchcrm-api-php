@@ -1,0 +1,5 @@
+<testsuites>
+    <testsuite name="SCCRM Api Wrapper Test Suite">
+        <directory>tests/</directory>
+    </testsuite>
+</testsuites>

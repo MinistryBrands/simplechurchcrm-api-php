@@ -1,0 +1,18 @@
+{
+    "name": "simplechurchcrm/api-php",
+    "description": "PHP Wrapper for the SimpleChurchCRM API.",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}

@@ -12,7 +12,7 @@ class SimpleChurchApi
     public function __construct(array $args)
     {
         if (empty($args['subDomain'])) {
-            throw new Exception('Argument "subDomain" is required.');
+            throw new \Exception('Argument "subDomain" is required.');
         }
 
         $this->setSubDomain($args['subDomain']);
